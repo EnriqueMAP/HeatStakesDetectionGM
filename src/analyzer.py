@@ -2,6 +2,7 @@
 import numpy as np
 from sklearn.cluster import DBSCAN
 from collections import Counter, defaultdict
+from src.family_merger import FamilyMerger
 
 class HeatStakeAnalyzer:
     def __init__(self, strict_mode=False):
@@ -9,6 +10,7 @@ class HeatStakeAnalyzer:
         self.MIN_CONNECTED_PLANES = 3 
         self.MIN_HEIGHT = 2.0
         self.MERGE_DISTANCE = 15.0 
+        self.FAMILY_MERGE_DISTANCE = 15.0  # Distancia para fusionar familias
         self.radius_tolerance = 0.2 
 
     def analyze_topology(self, cylinders):
@@ -32,10 +34,17 @@ class HeatStakeAnalyzer:
         grouped_candidates = self._group_by_families(population)
         
         # 3. FUSIÓN DE DUPLICADOS (Por cada familia)
-        final_stakes = []
+        family_stakes = {}
         for family_id, candidates in grouped_candidates.items():
             merged = self._merge_close_candidates(candidates, family_id)
-            final_stakes.extend(merged)
+            family_stakes[family_id] = merged
+        
+        # 4. ⭐ SISTEMA COMPLETO DE FUSIÓN DE FAMILIAS ⭐
+        merger = FamilyMerger()
+        final_stakes = merger.merge_all_families(family_stakes)
+        
+        # Mostrar resumen
+        merger.print_fusion_summary(final_stakes)
         
         print(f"✓ Detectados totales: {len(final_stakes)}")
         return final_stakes, remaining_cylinders
@@ -79,6 +88,7 @@ class HeatStakeAnalyzer:
         return valid_families
 
     def _merge_close_candidates(self, candidates, family_id):
+        """Fusiona candidatos cercanos dentro de una familia"""
         if not candidates: return []
         
         points = np.array([c['center'] for c in candidates])
@@ -88,17 +98,22 @@ class HeatStakeAnalyzer:
         merged_results = []
         for label in set(labels):
             indices = [i for i, x in enumerate(labels) if x == label]
+            group_cylinders = [candidates[i] for i in indices]
             
-            avg_centroid = points[indices].mean(axis=0)
-            avg_radius = np.mean([candidates[i]['radius'] for i in indices])
-            max_planes = np.max([candidates[i]['connected_planes'] for i in indices])
+            # ⭐ Calcular centro de gravedad real
+            positions = np.array([c['center'] for c in group_cylinders])
+            centroid = np.mean(positions, axis=0)
+            
+            avg_radius = np.mean([c['radius'] for c in group_cylinders])
+            max_planes = np.max([c['connected_planes'] for c in group_cylinders])
             
             merged_results.append({
                 'cluster_id': f"{family_id}-{label+1}",
                 'family_id': family_id,
+                'cylinders': group_cylinders,  # Guardamos los cilindros originales
                 'analysis': {
-                    'centroid': tuple(avg_centroid),
-                    'num_cylinders': 1,
+                    'centroid': tuple(centroid),
+                    'num_cylinders': len(group_cylinders),
                     'avg_radius': avg_radius,
                     'connected_planes': int(max_planes)
                 },
@@ -130,7 +145,7 @@ class HeatStakeAnalyzer:
             
             # Datos del grupo
             center = np.mean([c['center'] for c in cluster_cyls], axis=0)
-            avg_rad = np.mean([c['radius'] for c in cluster_cyls]) # Calculamos radio promedio
+            avg_rad = np.mean([c['radius'] for c in cluster_cyls])
             
             candidates.append({
                 'cluster_id': f"LEGACY-{label}",

@@ -1,62 +1,379 @@
-REPORTE: 59 Heat Stakes detectados.
-LEYENDA: GRP1=Verde (ComÃºn), GRP2=Azul, GRP3=Magenta
+======================================================================
+REPORTE DE HEAT STAKES DETECTADOS
+======================================================================
 
-GRP1-1: R=1.00mm en (np.float64(5422.84271779824), np.float64(-743.0301240961435), np.float64(1579.060973467155))
-GRP1-2: R=1.00mm en (np.float64(5604.596920431461), np.float64(-725.6180739129622), np.float64(1477.0902735697266))
-GRP1-3: R=1.00mm en (np.float64(5410.3979621525405), np.float64(-716.3336363663817), np.float64(1612.675144426665))
-GRP1-4: R=1.00mm en (np.float64(5460.366533692466), np.float64(-713.103903299096), np.float64(1612.424283162778))
-GRP1-5: R=1.00mm en (np.float64(5438.037896928265), np.float64(-698.7534831214338), np.float64(1295.71369787559))
-GRP1-6: R=1.00mm en (np.float64(5484.059013354308), np.float64(-698.6011675308546), np.float64(1347.1165259316267))
-GRP1-7: R=1.00mm en (np.float64(5785.96813411903), np.float64(-760.3486200574885), np.float64(1485.8012987959235))
-GRP1-8: R=1.00mm en (np.float64(5716.904773850234), np.float64(-737.8698748829546), np.float64(1513.3125092778))
-GRP1-9: R=1.00mm en (np.float64(5508.052796541699), np.float64(-710.103903299097), np.float64(1591.76630010185))
-GRP1-10: R=1.00mm en (np.float64(5806.964323286559), np.float64(-745.4939901269414), np.float64(1526.9926073673948))
-GRP1-11: R=1.00mm en (np.float64(5610.829098561884), np.float64(-743.283910489234), np.float64(1456.183444575715))
-GRP1-12: R=1.00mm en (np.float64(5520.570813210118), np.float64(-741.7211270117765), np.float64(1492.919644005017))
-GRP1-13: R=1.00mm en (np.float64(5475.370129068873), np.float64(-741.7211270117765), np.float64(1446.208851321065))
-GRP1-14: R=1.00mm en (np.float64(5638.816147925694), np.float64(-724.7218044114579), np.float64(1518.76197743905))
-GRP1-15: R=1.00mm en (np.float64(5540.6743045417115), np.float64(-716.8436166799622), np.float64(1590.2523866984525))
-GRP2-1: R=3.17mm en (np.float64(6177.37098324288), np.float64(-714.250629735502), np.float64(1230.32255525429))
-GRP2-2: R=3.17mm en (np.float64(5772.49281089647), np.float64(-724.652148041631), np.float64(1048.64365681921))
-GRP2-3: R=3.17mm en (np.float64(6156.38716585585), np.float64(-749.912837520701), np.float64(1156.45243979944))
-GRP2-4: R=3.17mm en (np.float64(5988.94630474862), np.float64(-715.234147234714), np.float64(1086.09963104007))
-GRP2-5: R=3.17mm en (np.float64(6095.82060067003), np.float64(-714.212435057899), np.float64(1111.57077131554))
-GRP2-6: R=3.17mm en (np.float64(6037.70453477009), np.float64(-714.36649750381), np.float64(1097.57967111928))
-GRP2-7: R=3.18mm en (np.float64(6176.75298599328), np.float64(-745.81559596097), np.float64(1214.11016082489))
-GRP2-8: R=3.17mm en (np.float64(5891.18648818717), np.float64(-715.498299699731), np.float64(1065.42979247652))
-GRP2-9: R=3.17mm en (np.float64(5940.04734761226), np.float64(-716.674883640375), np.float64(1075.06982184603))
-GRP2-10: R=3.17mm en (np.float64(5837.69404265645), np.float64(-752.51883341367), np.float64(1849.94216967388))
-GRP2-11: R=3.17mm en (np.float64(5930.81460334433), np.float64(-771.404015155402), np.float64(1531.94844010116))
-GRP2-12: R=3.17mm en (np.float64(5598.31021661056), np.float64(-749.822063133816), np.float64(1382.17498095253))
-GRP2-13: R=3.17mm en (np.float64(5542.01210871867), np.float64(-744.217843053319), np.float64(1351.34103051556))
-GRP2-14: R=3.17mm en (np.float64(5559.16547493929), np.float64(-726.656525034388), np.float64(1432.6332758844))
-GRP2-15: R=3.18mm en (np.float64(5715.33305073711), np.float64(-766.177347733894), np.float64(1442.47840085075))
-GRP2-16: R=3.17mm en (np.float64(5437.26203070466), np.float64(-735.729960851162), np.float64(1344.75935945989))
-GRP2-17: R=3.18mm en (np.float64(5861.98780939923), np.float64(-772.664628590081), np.float64(1483.25914796729))
-GRP2-18: R=3.17mm en (np.float64(5560.20519570988), np.float64(-716.269529635075), np.float64(1530.54178491982))
-GRP2-19: R=3.17mm en (np.float64(5426.9487385119), np.float64(-738.165275283416), np.float64(1495.40427712896))
-GRP2-20: R=3.18mm en (np.float64(5906.22404813377), np.float64(-768.606093695333), np.float64(1508.55869360689))
-GRP2-21: R=3.17mm en (np.float64(5419.7276272039), np.float64(-734.679784891282), np.float64(1444.08856893323))
-GRP2-22: R=3.17mm en (np.float64(5425.08860540187), np.float64(-735.07931145197), np.float64(1548.90920142731))
-GRP2-23: R=3.17mm en (np.float64(5837.69404265645), np.float64(-752.51883341367), np.float64(1549.94216967388))
-GRP2-24: R=3.17mm en (np.float64(5765.39226787071), np.float64(-769.156001186721), np.float64(1448.2441727196))
-GRP2-25: R=3.17mm en (np.float64(5443.99435839134), np.float64(-734.138877797544), np.float64(1396.44136628521))
-GRP2-26: R=3.18mm en (np.float64(5664.94162833635), np.float64(-763.413126053959), np.float64(1451.13005269731))
-GRP2-27: R=3.17mm en (np.float64(5425.07728103671), np.float64(-715.579311452106), np.float64(1522.46117274454))
-GRP2-28: R=3.18mm en (np.float64(5905.67304608436), np.float64(-739.466001177159), np.float64(1537.02506020226))
-GRP2-29: R=3.17mm en (np.float64(5885.86299882335), np.float64(-758.966001177452), np.float64(1539.98420371176))
-GRP2-30: R=3.18mm en (np.float64(5815.25608815779), np.float64(-771.784109873799), np.float64(1460.44614558984))
-GRP3-1: R=3.90mm en (np.float64(6177.37098324288), np.float64(-714.250629735502), np.float64(1230.32255525429))
-GRP3-2: R=3.90mm en (np.float64(5425.07728103668), np.float64(-715.579311452224), np.float64(1522.46117274452))
-GRP3-3: R=3.90mm en (np.float64(5905.67304608436), np.float64(-739.466001177159), np.float64(1537.02506020226))
-LEGACY-0: R=0.33mm en (np.float64(5772.5719654912455), np.float64(-712.1988242694473), np.float64(1048.0573080201912))
-LEGACY-1: R=0.33mm en (np.float64(6157.4160337768635), np.float64(-737.2221824050215), np.float64(1156.1340715929057))
-LEGACY-2: R=0.33mm en (np.float64(5988.9463047486215), np.float64(-702.7977691317606), np.float64(1085.7470712936513))
-LEGACY-3: R=0.33mm en (np.float64(6095.941649971657), np.float64(-701.7954234340656), np.float64(1111.352392594677))
-LEGACY-4: R=0.33mm en (np.float64(6037.704534770092), np.float64(-701.9301194008567), np.float64(1097.2271113728614))
-LEGACY-5: R=0.34mm en (np.float64(6174.515039358422), np.float64(-733.2089884155413), np.float64(1214.4471604548564))
-LEGACY-6: R=0.33mm en (np.float64(5891.088647727296), np.float64(-703.0352926879899), np.float64(1065.0356186969618))
-LEGACY-7: R=0.33mm en (np.float64(5940.047347612258), np.float64(-704.2385055374214), np.float64(1074.7172620996132))
-LEGACY-8: R=0.25mm en (np.float64(5701.790172158202), np.float64(-757.4394640620319), np.float64(1567.1331760216458))
-LEGACY-9: R=0.91mm en (np.float64(5733.7058483172505), np.float64(-749.5720791169143), np.float64(1527.20608916323))
-LEGACY-10: R=0.44mm en (np.float64(5701.9556384466605), np.float64(-744.7949441257382), np.float64(1587.0419820168765))
+Total detectados: 68
+LEYENDA: GRP1=Verde, GRP2=Azul, MERGED=Morado (Fusionados)
+
+
+======================================================================
+ESTADÍSTICAS POR TIPO
+======================================================================
+
+MERGED: 2 heat stakes
+  - GRP1: 2 fusiones
+
+GRP1: 31 heat stakes
+
+GRP2: 10 heat stakes
+
+GRP3: 14 heat stakes
+
+GRP4: 2 heat stakes
+
+GRP5: 2 heat stakes
+
+GRP6: 2 heat stakes
+
+UNKNOWN: 5 heat stakes
+
+======================================================================
+DETALLE DE HEAT STAKES
+======================================================================
+
+1. MERGED-GRP1-680
+   Posición: (4526.86, -721.35, 1600.55)
+   Radio promedio: 0.50mm
+   Cilindros: 3
+   Tipo: FUSIONADO (GRP1)
+   Componentes fusionados: 2
+   Dispersión máxima: 14.48mm
+
+2. MERGED-GRP1-552
+   Posición: (4754.76, -736.80, 1612.70)
+   Radio promedio: 0.50mm
+   Cilindros: 4
+   Tipo: FUSIONADO (GRP1)
+   Componentes fusionados: 2
+   Dispersión máxima: 12.72mm
+
+3. GRP1-1
+   Posición: (4976.72, -733.50, 1570.14)
+   Radio promedio: 0.50mm
+   Cilindros: 4
+
+4. GRP1-4
+   Posición: (4359.61, -714.07, 1599.98)
+   Radio promedio: 0.50mm
+   Cilindros: 4
+
+5. GRP1-5
+   Posición: (5190.15, -743.22, 1623.60)
+   Radio promedio: 0.50mm
+   Cilindros: 4
+
+6. GRP1-6
+   Posición: (4759.87, -743.93, 1530.05)
+   Radio promedio: 0.50mm
+   Cilindros: 2
+
+7. GRP1-7
+   Posición: (4348.24, -740.67, 1527.88)
+   Radio promedio: 0.50mm
+   Cilindros: 3
+
+8. GRP1-8
+   Posición: (4787.24, -741.66, 1500.47)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+9. GRP1-9
+   Posición: (4645.50, -737.66, 1505.95)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+10. GRP1-10
+   Posición: (4591.37, -737.66, 1491.82)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+11. GRP1-11
+   Posición: (4506.95, -733.65, 1498.65)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+12. GRP1-12
+   Posición: (4476.75, -733.65, 1475.03)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+13. GRP1-13
+   Posición: (4417.18, -742.87, 1462.42)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+14. GRP1-14
+   Posición: (4338.66, -742.87, 1466.53)
+   Radio promedio: 0.50mm
+   Cilindros: 2
+
+15. GRP1-15
+   Posición: (5104.60, -734.50, 1548.46)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+16. GRP1-16
+   Posición: (5154.21, -741.06, 1437.44)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+17. GRP1-17
+   Posición: (5154.21, -742.06, 1472.44)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+18. GRP1-18
+   Posición: (5077.67, -745.36, 1469.55)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+19. GRP1-19
+   Posición: (5004.57, -745.36, 1484.85)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+20. GRP1-20
+   Posición: (4929.77, -745.96, 1485.11)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+21. GRP1-21
+   Posición: (4856.68, -743.36, 1500.91)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+22. GRP1-24
+   Posición: (4830.16, -743.66, 1619.07)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+23. GRP1-25
+   Posición: (4904.94, -743.29, 1618.61)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+24. GRP1-26
+   Posición: (4981.16, -745.86, 1626.55)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+25. GRP1-27
+   Posición: (5056.15, -742.02, 1621.71)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+26. GRP1-28
+   Posición: (5130.60, -741.97, 1633.14)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+27. GRP1-29
+   Posición: (4681.09, -727.73, 1594.79)
+   Radio promedio: 0.50mm
+   Cilindros: 4
+
+28. GRP1-30
+   Posición: (4605.26, -724.06, 1599.60)
+   Radio promedio: 0.50mm
+   Cilindros: 4
+
+29. GRP1-31
+   Posición: (4490.16, -721.30, 1592.35)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+30. GRP1-32
+   Posición: (4394.15, -719.85, 1583.71)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+31. GRP1-33
+   Posición: (5040.82, -737.50, 1505.54)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+32. GRP1-34
+   Posición: (4922.07, -735.50, 1526.68)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+33. GRP1-35
+   Posición: (4856.68, -743.36, 1870.91)
+   Radio promedio: 0.50mm
+   Cilindros: 5
+
+34. GRP2-1
+   Posición: (4771.64, -751.96, 1334.35)
+   Radio promedio: 3.00mm
+   Cilindros: 1
+
+35. GRP2-2
+   Posición: (4699.84, -700.06, 1352.73)
+   Radio promedio: 3.00mm
+   Cilindros: 2
+
+36. GRP2-3
+   Posición: (4586.46, -743.07, 1552.79)
+   Radio promedio: 3.00mm
+   Cilindros: 1
+
+37. GRP2-4
+   Posición: (5173.53, -760.99, 1657.99)
+   Radio promedio: 3.00mm
+   Cilindros: 2
+
+38. GRP2-5
+   Posición: (5042.63, -762.86, 1652.01)
+   Radio promedio: 3.00mm
+   Cilindros: 2
+
+39. GRP2-6
+   Posición: (4911.76, -764.34, 1645.72)
+   Radio promedio: 3.00mm
+   Cilindros: 2
+
+40. GRP2-7
+   Posición: (4780.89, -765.41, 1639.14)
+   Radio promedio: 3.00mm
+   Cilindros: 2
+
+41. GRP2-8
+   Posición: (4650.08, -765.89, 1632.15)
+   Radio promedio: 3.00mm
+   Cilindros: 2
+
+42. GRP2-9
+   Posición: (4519.36, -766.36, 1624.47)
+   Radio promedio: 3.00mm
+   Cilindros: 2
+
+43. GRP2-10
+   Posición: (4388.58, -765.94, 1616.76)
+   Radio promedio: 3.00mm
+   Cilindros: 2
+
+44. GRP3-1
+   Posición: (5182.03, -756.49, 1660.44)
+   Radio promedio: 1.00mm
+   Cilindros: 1
+
+45. GRP3-2
+   Posición: (5164.85, -756.49, 1659.69)
+   Radio promedio: 1.00mm
+   Cilindros: 1
+
+46. GRP3-3
+   Posición: (5051.12, -758.36, 1654.49)
+   Radio promedio: 1.00mm
+   Cilindros: 1
+
+47. GRP3-4
+   Posición: (5033.94, -758.36, 1653.68)
+   Radio promedio: 1.00mm
+   Cilindros: 1
+
+48. GRP3-5
+   Posición: (4789.37, -760.91, 1641.66)
+   Radio promedio: 1.00mm
+   Cilindros: 1
+
+49. GRP3-6
+   Posición: (4772.20, -760.91, 1640.76)
+   Radio promedio: 1.00mm
+   Cilindros: 1
+
+50. GRP3-7
+   Posición: (4658.55, -761.39, 1634.69)
+   Radio promedio: 1.00mm
+   Cilindros: 1
+
+51. GRP3-8
+   Posición: (4641.38, -761.39, 1633.76)
+   Radio promedio: 1.00mm
+   Cilindros: 1
+
+52. GRP3-9
+   Posición: (4527.80, -761.86, 1627.12)
+   Radio promedio: 1.00mm
+   Cilindros: 1
+
+53. GRP3-10
+   Posición: (4510.64, -761.86, 1625.98)
+   Radio promedio: 1.00mm
+   Cilindros: 1
+
+54. GRP3-11
+   Posición: (4920.24, -759.84, 1648.23)
+   Radio promedio: 1.00mm
+   Cilindros: 1
+
+55. GRP3-12
+   Posición: (4903.06, -759.84, 1647.36)
+   Radio promedio: 1.00mm
+   Cilindros: 1
+
+56. GRP3-13
+   Posición: (4397.02, -761.44, 1619.41)
+   Radio promedio: 1.00mm
+   Cilindros: 1
+
+57. GRP3-14
+   Posición: (4379.86, -761.44, 1618.27)
+   Radio promedio: 1.00mm
+   Cilindros: 1
+
+58. GRP4-1
+   Posición: (4851.04, -757.21, 1328.51)
+   Radio promedio: 0.25mm
+   Cilindros: 4
+
+59. GRP4-2
+   Posición: (4764.32, -755.21, 1331.16)
+   Radio promedio: 0.25mm
+   Cilindros: 4
+
+60. GRP5-1
+   Posición: (4707.98, -708.65, 1351.40)
+   Radio promedio: 4.00mm
+   Cilindros: 2
+
+61. GRP5-2
+   Posición: (4691.53, -708.59, 1347.88)
+   Radio promedio: 4.00mm
+   Cilindros: 2
+
+62. GRP6-1
+   Posición: (4869.42, -698.16, 1381.53)
+   Radio promedio: 2.00mm
+   Cilindros: 1
+
+63. GRP6-2
+   Posición: (4871.34, -716.38, 1375.85)
+   Radio promedio: 2.00mm
+   Cilindros: 3
+
+64. LEGACY-0
+   Posición: (5040.82, -694.16, 1359.58)
+   Radio promedio: 3.22mm
+   Cilindros: 5
+
+65. LEGACY-1
+   Posición: (4699.85, -708.63, 1350.28)
+   Radio promedio: 2.42mm
+   Cilindros: 13
+
+66. LEGACY-2
+   Posición: (4845.40, -754.68, 1327.78)
+   Radio promedio: 2.14mm
+   Cilindros: 20
+
+67. LEGACY-3
+   Posición: (4769.87, -752.88, 1330.36)
+   Radio promedio: 1.95mm
+   Cilindros: 19
+
+68. LEGACY-4
+   Posición: (4938.57, -694.16, 1354.04)
+   Radio promedio: 3.22mm
+   Cilindros: 5
+
