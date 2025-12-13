@@ -4,7 +4,7 @@ channels:
   - defaults
 dependencies:
   - python=3.10
-  - pythonocc-core=7.7.1
+  - pythonocc-core  # <--- SIN NÚMERO, para que baje la última estable (7.7.2 o 7.9.0)
   - numpy
   - scikit-learn
   - pandas
