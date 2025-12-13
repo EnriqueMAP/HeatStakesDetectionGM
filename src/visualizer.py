@@ -9,6 +9,7 @@ from OCC.Core.BRepBndLib import brepbndlib
 from OCC.Core.V3d import V3d_TypeOfOrientation
 import sys
 
+
 class ResultVisualizer:
     def __init__(self, shape, valid_stakes, rejected_clusters):
         self.shape = shape

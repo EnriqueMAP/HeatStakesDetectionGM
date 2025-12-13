@@ -12,6 +12,7 @@ from OCC.Core.BRepExtrema import BRepExtrema_DistShapeShape
 from OCC.Core.Bnd import Bnd_Box
 from OCC.Core.BRepBndLib import brepbndlib_Add
 
+
 class GeometryProcessor:
     def __init__(self, step_file):
         self.step_file = step_file

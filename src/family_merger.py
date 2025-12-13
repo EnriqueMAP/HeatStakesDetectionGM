@@ -1,7 +1,6 @@
 # src/family_merger.py
 import numpy as np
 from itertools import combinations
-
 class FamilyMerger:
     """
     Sistema completo para fusionar diferentes familias de heat stakes
