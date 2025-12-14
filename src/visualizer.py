@@ -71,7 +71,7 @@ class ResultVisualizer:
         finally:
             print("\n👋 Cerrando aplicación y limpiando procesos...")
             # ESTO ES LO QUE MATA LA CONSOLA AL CERRAR LA VENTANA
-            sys.exit(0)
+           # sys.exit(0)
 
     def _build_menu(self):
         """Construye el menú superior con nombres legibles"""

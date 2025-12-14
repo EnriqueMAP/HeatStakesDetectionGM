@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 import threading
 import os
+import sys
 
 # Importamos tu lógica existente
 from src.geometry import GeometryProcessor
@@ -13,7 +14,7 @@ class HeatStakeLauncher:
     def __init__(self, root):
         self.root = root
         self.root.title("Heat Stakes Detector - Launcher")
-        self.root.geometry("500x350")
+        self.root.geometry("500x420") # Un poco más alto para la barra
         self.root.resizable(False, False)
         
         # Estilo
@@ -24,7 +25,7 @@ class HeatStakeLauncher:
         self.file_path = tk.StringVar()
         self.view_3d = tk.BooleanVar(value=True)
         self.show_rejected = tk.BooleanVar(value=False)
-        self.custom_rules = tk.BooleanVar(value=False)
+        self.custom_rules = tk.BooleanVar(value=True)
         self.eps_val = tk.DoubleVar(value=15.0)
 
         # --- UI Layout ---
@@ -36,7 +37,7 @@ class HeatStakeLauncher:
         lbl_title.pack(pady=(0, 20))
 
         # Selección de Archivo
-        file_frame = ttk.LabelFrame(main_frame, text="Archivo STEP", padding="10")
+        file_frame = ttk.LabelFrame(main_frame, text="1. Archivo STEP", padding="10")
         file_frame.pack(fill=tk.X, pady=5)
         
         self.lbl_file = ttk.Label(file_frame, text="Ningún archivo seleccionado", foreground="gray")
@@ -46,7 +47,7 @@ class HeatStakeLauncher:
         btn_browse.pack(side=tk.RIGHT)
 
         # Opciones
-        opts_frame = ttk.LabelFrame(main_frame, text="Configuración", padding="10")
+        opts_frame = ttk.LabelFrame(main_frame, text="2. Configuración", padding="10")
         opts_frame.pack(fill=tk.X, pady=10)
         
         ttk.Checkbutton(opts_frame, text="Visualización 3D Interactiva", variable=self.view_3d).pack(anchor="w")
@@ -54,8 +55,11 @@ class HeatStakeLauncher:
         ttk.Checkbutton(opts_frame, text="Usar Reglas de Fusión Personalizadas", variable=self.custom_rules).pack(anchor="w")
         
         # Botón de Acción
-        self.btn_run = ttk.Button(main_frame, text="🚀 INICIAR ANÁLISIS", command=self.run_analysis)
-        self.btn_run.pack(fill=tk.X, pady=20)
+        self.btn_run = ttk.Button(main_frame, text="🚀 INICIAR ANÁLISIS", command=self.start_analysis_thread)
+        self.btn_run.pack(fill=tk.X, pady=(20, 10))
+        
+        # Barra de Progreso (Inicialmente oculta)
+        self.progress = ttk.Progressbar(main_frame, orient=tk.HORIZONTAL, mode='indeterminate')
         
         # Barra de estado
         self.status_var = tk.StringVar(value="Listo.")
@@ -71,84 +75,93 @@ class HeatStakeLauncher:
             self.file_path.set(filename)
             self.lbl_file.config(text=os.path.basename(filename), foreground="black")
 
-    def run_analysis(self):
+    def start_analysis_thread(self):
+        """Prepara la UI y lanza el hilo de procesamiento"""
         step_file = self.file_path.get()
         if not step_file:
             messagebox.showwarning("Atención", "Por favor selecciona un archivo .stp primero.")
             return
 
-        # Desactivar botón para evitar doble clic
+        # UI en modo "Cargando"
         self.btn_run.config(state="disabled")
-        self.status_var.set("⏳ Procesando... Por favor espere (la ventana puede congelarse unos segundos).")
-        self.root.update()
+        self.progress.pack(fill=tk.X, pady=5) # Mostrar barra
+        self.progress.start(10) # Iniciar animación
+        self.status_var.set("⏳ Procesando geometría... (Esto puede tardar unos segundos)")
+        
+        # Ejecutar lógica pesada en otro hilo para no congelar la ventana
+        threading.Thread(target=self.process_logic_background, args=(step_file,), daemon=True).start()
 
-        # Ejecutar en un hilo separado para no congelar la UI totalmente (opcional pero recomendado)
-        # Sin embargo, pythonocc necesita el hilo principal para la GUI. 
-        # Así que ejecutamos la lógica pesada aquí y lanzamos el visualizador al final.
+    def process_logic_background(self, file_path):
+        """Lógica pesada que corre en segundo plano"""
         try:
-            self.process_logic(step_file)
+            # 1. Geometría
+            geo = GeometryProcessor(file_path)
+            geo.load_step()
+            cylinders = geo.extract_features_topology()
+
+            # 2. Análisis
+            analyzer = HeatStakeAnalyzer()
+            topo_stakes, remaining = analyzer.analyze_topology(cylinders)
+            cluster_stakes, rejected = analyzer.analyze_clusters_legacy(remaining, eps=self.eps_val.get())
+            
+            all_valid_stakes = topo_stakes + cluster_stakes
+
+            # 3. Fusión
+            if self.custom_rules.get():
+                merger = FamilyMerger()
+                by_fam = {}
+                for s in all_valid_stakes:
+                    fam = s.get('family_id', 'DEFAULT')
+                    if fam not in by_fam: by_fam[fam] = []
+                    by_fam[fam].append(s)
+                
+                all_valid_stakes = merger.merge_all_families(by_fam)
+
+            # Exportar reporte
+            output_file = "reporte_deteccion.txt"
+            
+            # --- VOLVER AL HILO PRINCIPAL ---
+            # No podemos tocar la GUI (Visualizador) desde este hilo secundario.
+            # Usamos root.after para programar la visualización en el hilo principal.
+            self.root.after(0, lambda: self.on_processing_finished(geo, all_valid_stakes, rejected, output_file))
+
         except Exception as e:
-            messagebox.showerror("Error", f"Ocurrió un error:\n{str(e)}")
-            self.status_var.set("Error.")
-        finally:
-            self.btn_run.config(state="normal")
+            self.root.after(0, lambda: self.on_error(str(e)))
 
-    def process_logic(self, file_path):
-        # 1. Geometría
-        self.status_var.set("Analizando geometría...")
-        self.root.update()
-        
-        geo = GeometryProcessor(file_path)
-        geo.load_step()
-        cylinders = geo.extract_features_topology()
+    def on_processing_finished(self, geo, valid_stakes, rejected, output_file):
+        """Se ejecuta en el hilo principal cuando termina el cálculo"""
+        # Detener animación
+        self.progress.stop()
+        self.progress.pack_forget() # Ocultar barra
+        self.btn_run.config(state="normal")
+        self.status_var.set(f"✅ Listo. Detectados: {len(valid_stakes)}")
 
-        # 2. Análisis
-        self.status_var.set("Detectando Heat Stakes...")
-        self.root.update()
-        
-        analyzer = HeatStakeAnalyzer()
-        topo_stakes, remaining = analyzer.analyze_topology(cylinders)
-        cluster_stakes, rejected = analyzer.analyze_clusters_legacy(remaining, eps=self.eps_val.get())
-        
-        all_valid_stakes = topo_stakes + cluster_stakes
-
-        # 3. Fusión (Si está activada o por defecto en analyzer)
-        if self.custom_rules.get():
-            self.status_var.set("Fusionando familias...")
-            merger = FamilyMerger()
-            # ... lógica extra si necesitas añadir reglas específicas ...
-            # Por ahora el analyzer ya hace una fusión interna, pero si quieres usar
-            # el FamilyMerger externo para reagrupar todo:
-            
-            by_fam = {}
-            for s in all_valid_stakes:
-                fam = s.get('family_id', 'DEFAULT')
-                if fam not in by_fam: by_fam[fam] = []
-                by_fam[fam].append(s)
-            
-            all_valid_stakes = merger.merge_all_families(by_fam)
-
-        # 4. Reporte y Visualización
-        self.status_var.set(f"¡Listo! Detectados: {len(all_valid_stakes)}")
-        
-        # Exportar automáticamente
-        output_file = "reporte_deteccion.txt"
-        
+        # Abrir Visualizador
         if self.view_3d.get():
-            # Ocultamos el launcher mientras se ve el 3D
-            self.root.withdraw()
+            self.root.withdraw() # Ocultar Launcher
             
-            viz = ResultVisualizer(geo.shape, all_valid_stakes, rejected)
-            viz.export_report(output_file)
-            
-            messagebox.showinfo("Éxito", f"Detección completada.\nEncontrados: {len(all_valid_stakes)}\nAbriendo visualizador 3D...")
-            
-            # Esto bloquea hasta que cierras la ventana 3D
-            viz.show_3d(show_rejected=self.show_rejected.get())
-            
-            # Volver a mostrar el launcher al cerrar
-            self.root.deiconify()
-            self.status_var.set("Visualización finalizada.")
+            try:
+                # Instanciar y exportar
+                viz = ResultVisualizer(geo.shape, valid_stakes, rejected)
+                viz.export_report(output_file)
+                
+                # Mostrar ventana 3D (Bloqueante hasta que se cierra)
+                viz.show_3d(show_rejected=self.show_rejected.get())
+            except SystemExit:
+                pass # Capturar si visualizer lanza sys.exit()
+            except Exception as e:
+                messagebox.showerror("Error Visualización", str(e))
+            finally:
+                # --- REAPARECER LAUNCHER ---
+                self.root.deiconify() 
+                self.status_var.set("Esperando nueva orden.")
+
+    def on_error(self, error_msg):
+        self.progress.stop()
+        self.progress.pack_forget()
+        self.btn_run.config(state="normal")
+        self.status_var.set("Error.")
+        messagebox.showerror("Error", f"Ocurrió un error:\n{error_msg}")
 
 if __name__ == "__main__":
     root = tk.Tk()
