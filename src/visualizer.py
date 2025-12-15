@@ -1,6 +1,8 @@
 # src/visualizer.py
 import sys
+import os
 import numpy as np
+import pandas as pd
 from collections import defaultdict
 
 # Importaciones de PythonOCC
@@ -17,39 +19,34 @@ class ResultVisualizer:
         self.valid_stakes = valid_stakes
         self.rejected_clusters = rejected_clusters
         
-        # Configuración de Colores
         self.config = {
             'GRP1':    {'color': (0.0, 1.0, 0.0), 'name': 'Verde'},
             'GRP2':    {'color': (0.0, 0.0, 1.0), 'name': 'Azul'},
             'GRP3':    {'color': (1.0, 0.0, 1.0), 'name': 'Magenta'},
             'GRP4':    {'color': (1.0, 1.0, 0.0), 'name': 'Amarillo'},
-            'MERGED':  {'color': (0.5, 0.0, 1.0), 'name': 'Morado (Fusionado)'},
+            'MERGED':  {'color': (0.5, 0.0, 1.0), 'name': 'Morado'},
             'DEFAULT': {'color': (1.0, 0.5, 0.0), 'name': 'Naranja'},
-            'REJECTED':{'color': (0.1, 0.1, 0.1), 'name': 'Rechazados (Negro)'}
+            'REJECTED':{'color': (0.1, 0.1, 0.1), 'name': 'Rechazados'}
         }
         
-        # Almacén de objetos gráficos
         self.ais_groups = defaultdict(list)
         self.visibility_states = {} 
 
     def show_3d(self, show_rejected=False):
-        print("\n🎨 Iniciando visualización SimpleGUI...")
-        print("🖱️  CONTROLES:")
-        print("   - Rotar: Clic Derecho")
-        print("   - Pan: Clic Central")
-        print("   - Zoom: Rueda")
-        print("   - MENÚ SUPERIOR 'Capas': Haz clic para ocultar/mostrar familias.")
+        print("\n🎨 Iniciando visualización...")
+        print("🖱️  CONTROLES: Clic Der (Rotar), Central (Pan), Rueda (Zoom).")
+        print("👆  MENÚ: Usa el menú 'CONTROL DE CAPAS' arriba.")
+        sys.stdout.flush()
         
-        # Inicializar Display
         self.display, self.start_display, self.add_menu, self.add_function = init_display()
         
-        # 1. Cargar Geometría Base (Transparente)
+        # 1. Dibujar Pieza
         if self.shape:
             ais_shape = AIS_Shape(self.shape)
-            self.display.Context.Display(ais_shape, True)
+            self.display.Context.Display(ais_shape, False)
             self.display.Context.SetTransparency(ais_shape, 0.8, True)
 
-        # 2. Dibujar Heat Stakes
+        # 2. Dibujar Esferas
         for i, hs in enumerate(self.valid_stakes):
             self._draw_marker(hs, i, is_rejected=False)
             
@@ -57,84 +54,97 @@ class ResultVisualizer:
             for i, r in enumerate(self.rejected_clusters):
                 self._draw_marker(r, i, is_rejected=True)
 
-        # 3. Construir el Menú de Filtros
+        # 3. Construir UI
         self._build_menu()
-
-        # 4. Enfoque Inteligente
         self._focus_camera()
         
-        # --- BUCLE PRINCIPAL ---
+        # Mostrar todo
+        self.display.Context.UpdateCurrentViewer()
+        self._print_status()
+
         try:
             self.start_display()
         except KeyboardInterrupt:
             pass
-        finally:
-            print("\n👋 Cerrando aplicación y limpiando procesos...")
-            # ESTO ES LO QUE MATA LA CONSOLA AL CERRAR LA VENTANA
-           # sys.exit(0)
 
     def _build_menu(self):
-        """Construye el menú superior con nombres legibles"""
-        menu_name = 'Capas (Ver/Ocultar)'
+        menu_name = 'CONTROL DE CAPAS'
         self.add_menu(menu_name)
-        
         sorted_groups = sorted(self.ais_groups.keys())
         
         for group_id in sorted_groups:
-            self.visibility_states[group_id] = True # Todos visibles al inicio
+            self.visibility_states[group_id] = True
             
-            # Nombre legible
-            color_data = self.config.get(group_id, self.config['DEFAULT'])
-            color_name = color_data['name']
-            item_label = f"Alternar {group_id} ({color_name})"
+            # Crear nombre bonito
+            color_name = self.config.get(group_id, self.config['DEFAULT'])['name']
+            # Reemplazamos espacios por guiones bajos porque a veces SimpleGui corta nombres con espacios
+            item_label = f"Alternar_{group_id}_({color_name})" 
             
-            # Crear callback encapsulado
-            callback = self._create_callback(group_id)
-            callback.__name__ = item_label # Texto del botón
+            # --- SOLUCIÓN: Usar un método fábrica ---
+            # Esto crea una función única para este grupo y le asigna el nombre correcto.
+            callback_function = self._create_menu_item(group_id, item_label)
             
-            self.add_function(menu_name, callback)
-            
-        print(f"✅ Menú creado con opciones para: {', '.join(sorted_groups)}")
+            self.add_function(menu_name, callback_function)
 
-    def _create_callback(self, group_id):
-        """Factory para aislar el scope de group_id"""
-        def callback():
+    def _create_menu_item(self, group_id, label_text):
+        """
+        Fábrica de funciones:
+        Crea una función 'callback' dedicada para un group_id específico.
+        Le asigna el __name__ para que aparezca bonito en el menú.
+        """
+        def callback(*args):
+            # Esta función 'recuerda' el group_id con el que fue creada (Closure)
             self._toggle_visibility(group_id)
+        
+        # AQUÍ ESTÁ EL TRUCO: Cambiamos el nombre interno de la función
+        callback.__name__ = label_text
         return callback
 
     def _toggle_visibility(self, group_id):
-        """Muestra u oculta los objetos del grupo seleccionado"""
-        new_state = not self.visibility_states[group_id]
-        self.visibility_states[group_id] = new_state
-        
-        action = "MOSTRANDO" if new_state else "OCULTANDO"
-        count = len(self.ais_groups[group_id])
-        print(f"👁️  {action} {group_id} ({count} objetos)...")
-        
-        ctx = self.display.Context
-        
-        # Operación en lote
-        for ais in self.ais_groups[group_id]:
-            if new_state:
-                # Redisplay refresca si ya estaba cargado pero oculto
-                ctx.Display(ais, False)
-            else:
-                # Erase oculta el objeto del visor pero lo mantiene en memoria
-                ctx.Erase(ais, False)
-        
-        # Actualizar visor OBLIGATORIO
-        ctx.UpdateCurrentViewer()
-        # Forzar repintado de la ventana (Fix para Linux/SimpleGUI)
-        self.display.Repaint()
+        print(f"🔄 Toggle: {group_id}")
+        sys.stdout.flush()
+
+        try:
+            new_state = not self.visibility_states[group_id]
+            self.visibility_states[group_id] = new_state
+            
+            ctx = self.display.Context
+            
+            for ais in self.ais_groups[group_id]:
+                if new_state:
+                    ctx.Display(ais, False)
+                else:
+                    ctx.Erase(ais, False)
+
+            ctx.UpdateCurrentViewer()
+            
+            if hasattr(self.display, 'Repaint'):
+                self.display.Repaint()
+            
+            self._print_status()
+
+        except Exception as e:
+            print(f"❌ ERROR: {e}")
+            sys.stdout.flush()
+
+    def _print_status(self):
+        print("\n" + "="*30)
+        print("   ESTADO DE VISIBILIDAD")
+        print("="*30)
+        for gid in sorted(self.ais_groups.keys()):
+            mark = "[ X ]" if self.visibility_states[gid] else "[   ]"
+            color_name = self.config.get(gid, self.config['DEFAULT'])['name']
+            count = len(self.ais_groups[gid])
+            print(f" {mark} {gid:<10} | {count:>3} items | {color_name}")
+        print("-" * 30 + "\n")
+        sys.stdout.flush()
 
     def _focus_camera(self):
         if not self.valid_stakes:
             self.display.FitAll()
             return
-
         points = [hs['analysis']['centroid'] for hs in self.valid_stakes]
         center = np.mean(np.array(points), axis=0)
-        
         self.display.View.SetAt(center[0], center[1], center[2])
         dist = 300.0
         self.display.View.SetEye(center[0]+dist, center[1]-dist, center[2]+dist)
@@ -154,43 +164,44 @@ class ResultVisualizer:
             family_id = item.get('family_id', 'DEFAULT')
             group_id = family_id
             cfg = self.config.get(family_id, self.config['DEFAULT'])
-            
-            if family_id == 'MERGED':
-                radius = 6.0
-                label = "M"
-            else:
-                radius = 4.0
-                full_id = item.get('cluster_id', 'UNK')
-                label = full_id.split('-')[0] if '-' in full_id else full_id
+            radius = 6.0 if family_id == 'MERGED' else 4.0
+            full_id = item.get('cluster_id', 'UNK')
+            label = "M" if family_id == 'MERGED' else (full_id.split('-')[0] if '-' in full_id else full_id)
 
         rgb = cfg['color']
         occ_color = Quantity_Color(rgb[0], rgb[1], rgb[2], Quantity_TOC_RGB)
-
         sphere = BRepPrimAPI_MakeSphere(pnt, radius).Shape()
         ais_sphere = AIS_Shape(sphere)
         
-        self.display.Context.Display(ais_sphere, True)
-        self.display.Context.SetColor(ais_sphere, occ_color, True)
+        self.display.Context.Display(ais_sphere, False)
+        self.display.Context.SetColor(ais_sphere, occ_color, False)
         
-        # Guardar en lista para el toggle
         self.ais_groups[group_id].append(ais_sphere)
-        
-        # Etiqueta
         text_pos = gp_Pnt(c[0], c[1], c[2] + radius * 1.5)
         self.display.DisplayMessage(text_pos, label, height=radius*0.8, message_color=(0,0,0))
 
-    def export_report(self, filename="report.txt"):
-        print(f"💾 Guardando reporte en {filename}...")
+    def export_reports(self, original_filepath):
+        if not original_filepath: base_name = "Sin_Nombre"
+        else: base_name = os.path.splitext(os.path.basename(original_filepath))[0]
+        
+        output_dir = os.path.join("Reportes", base_name)
+        os.makedirs(output_dir, exist_ok=True)
+        xlsx_filename = os.path.join(output_dir, f"Reporte_{base_name}.xlsx")
+        
         try:
-            with open(filename, 'w') as f:
-                f.write(f"REPORTE HEAT STAKES\n{'='*30}\n")
-                f.write(f"Total Detectados: {len(self.valid_stakes)}\n\n")
-                for i, hs in enumerate(self.valid_stakes, 1):
-                    c = hs['analysis']['centroid']
-                    cid = hs.get('cluster_id', '?')
-                    fid = hs.get('family_id', '?')
-                    rad = hs['analysis'].get('avg_radius', 0.0)
-                    f.write(f"{i}. {cid} ({fid}) | Pos: {c} | R={rad:.2f}\n")
-            print("✅ Reporte guardado.")
+            data = []
+            for hs in self.valid_stakes:
+                c = hs['analysis']['centroid']
+                data.append({
+                    "ID": hs.get('cluster_id', 'UNK'),
+                    "Familia": hs.get('family_id', 'UNK'),
+                    "X": round(c[0], 3), "Y": round(c[1], 3), "Z": round(c[2], 3),
+                    "Radio": round(hs['analysis'].get('avg_radius', 0.0), 3)
+                })
+            df = pd.DataFrame(data)
+            if not df.empty: df.to_excel(xlsx_filename, index=False)
+            print(f"💾 Reporte Excel guardado en: {xlsx_filename}")
+            sys.stdout.flush()
         except Exception as e:
-            print(f"❌ Error guardando reporte: {e}")
+            print(f"❌ Error Excel: {e}")
+            sys.stdout.flush()

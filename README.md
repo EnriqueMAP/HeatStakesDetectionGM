@@ -1,2 +1,2 @@
 # HeatStakesDetectionGM
-Project to GeneralMotors about HeatStales detection
+Project to GeneralMotors about HeatStakes detection
