@@ -46,7 +46,7 @@ The goal was to create a standalone software tool capable of processing complex 
 * **Core Logic:** `pythonocc-core` (Geometric Kernel), `numpy`
 * **Analysis/AI:** `scikit-learn` (DBSCAN Clustering), `pandas`
 * **GUI:** `tkinter` (Standard Python GUI)
-* **Visualization:** `pythonocc-display`
+* **Visualization:** `pythonocc` (AIS, Display, OpenCascade kernel)
 
 ## Installation
 
@@ -56,7 +56,7 @@ The goal was to create a standalone software tool capable of processing complex 
 ### Steps
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/your-username/HeatStakesDetectionGM.git](https://github.com/your-username/HeatStakesDetectionGM.git)
+    git clone [https://github.com/EnriqueMAP/HeatStakesDetectionGM.git](https://github.com/EnriqueMAP/HeatStakesDetectionGM.git)
     cd HeatStakesDetectionGM
     ```
 
@@ -85,7 +85,53 @@ The goal was to create a standalone software tool capable of processing complex 
 4.  **Results:** Check the `Reportes/` folder created in the root directory.
 
 ## Project Structure
-HeatStakesDetectionGM/ ├── app_gui.py # Main Launcher (User Interface) ├── run_process.py # Background worker for processing ├── src/ # Core Logic Modules │ ├── geometry.py # STEP loading and topology extraction │ ├── analyzer.py # Filtering algorithms and DBSCAN │ ├── visualizer.py # 3D viewing logic and menus │ └── family_merger.py # Logic to merge split faces └── Reportes/ # Generated output (ignored by git)
+HeatStakesDetectionGM/
+│
+├── app_gui.py
+│   # Main application entry point.
+│   # Launches the graphical user interface.
+│
+├── run_process.py
+│   # Background worker responsible for heavy geometric processing.
+│   # Prevents UI blocking during analysis.
+│
+├── src/
+│   # Core logic and processing modules
+│   │
+│   ├── geometry.py
+│   # STEP file loading and topology extraction
+│   │
+│   ├── analyzer.py
+│   # Geometric filtering and DBSCAN-based clustering
+│   │
+│   ├── visualizer.py
+│   # 3D visualization logic and interaction menus
+│   │
+│   └── family_merger.py
+│   # Logic for merging geometrically related or split faces
+│
+└── Reportes/
+    # Generated output files (ignored by git)
+
+## 🔮 Future Work & Recommendations
+
+While the current system fulfills the original project objectives, several extensions could further enhance its industrial applicability and scalability:
+
+### 📦 Packaging
+- Convert the tool into a standalone executable (`.exe`)
+- Simplify deployment on plant PCs without requiring a Python environment
+
+### 📈 Scalability
+- Extend geometric analysis to detect additional features:
+  - Clips
+  - Screws
+  - Weld points
+  - Other fastening elements
+
+### 🗂️ Batch Processing
+- Enable automatic analysis of entire folders
+- Support hundreds of STEP files per execution
+- Improve throughput for large-scale inspections
 
 ## The Team
 **Lead Developers & Researchers:**
@@ -123,7 +169,7 @@ El objetivo fue crear una herramienta de software independiente capaz de procesa
 * **Lógica Núcleo:** `pythonocc-core` (Kernel Geométrico), `numpy`
 * **Análisis/IA:** `scikit-learn` (DBSCAN Clustering), `pandas`
 * **Interfaz (GUI):** `tkinter`
-* **Visualización:** `pythonocc-display`
+* **Visualización:** `pythonocc` (AIS, Display, OpenCascade kernel)
 
 ## Instalación
 
@@ -133,7 +179,7 @@ El objetivo fue crear una herramienta de software independiente capaz de procesa
 ### Pasos
 1.  **Clonar el repositorio:**
     ```bash
-    git clone [https://github.com/tu-usuario/HeatStakesDetectionGM.git](https://github.com/tu-usuario/HeatStakesDetectionGM.git)
+    git clone [https://github.com/EnriqueMAP/HeatStakesDetectionGM.git](https://github.com/EnriqueMAP/HeatStakesDetectionGM.git)
     cd HeatStakesDetectionGM
     ```
 
@@ -162,8 +208,53 @@ El objetivo fue crear una herramienta de software independiente capaz de procesa
 4.  **Resultados:** Revisa la carpeta `Reportes/` que se crea automáticamente.
 
 ## Estructura del Proyecto
-HeatStakesDetectionGM/ ├── app_gui.py # Launcher Principal (Interfaz de Usuario) ├── run_process.py # Proceso en segundo plano (Worker) ├── src/ # Módulos de Lógica Interna │ ├── geometry.py # Carga de STEP y extracción topológica │ ├── analyzer.py # Algoritmos de filtrado y DBSCAN │ ├── visualizer.py # Lógica de visualización 3D y menús │ └── family_merger.py # Lógica para unir caras fragmentadas └── Reportes/ # Salida generada (ignorado por git)
+HeatStakesDetectionGM/
+│
+├── app_gui.py
+│   # Punto de entrada principal.
+│   # Lanza la interfaz gráfica del sistema.
+│
+├── run_process.py
+│   # Proceso en segundo plano encargado del análisis geométrico.
+│   # Evita bloqueos en la interfaz.
+│
+├── src/
+│   # Módulos de lógica interna y procesamiento
+│   │
+│   ├── geometry.py
+│   # Carga de archivos STEP y extracción topológica
+│   │
+│   ├── analyzer.py
+│   # Filtrado geométrico y clustering mediante DBSCAN
+│   │
+│   ├── visualizer.py
+│   # Visualización 3D e interacción con el modelo
+│   │
+│   └── family_merger.py
+│   # Lógica para unir caras geométricamente relacionadas
+│
+└── Reportes/
+    # Archivos generados (ignorados por git)
 
+## 🔮 Trabajo Futuro y Recomendaciones
+
+Aunque el sistema actual cumple con los objetivos planteados inicialmente, existen extensiones que pueden incrementar su aplicabilidad industrial:
+
+### 📦 Empaquetado
+- Convertir la herramienta en un ejecutable independiente (`.exe`)
+- Facilitar la instalación en computadoras de planta sin entorno Python
+
+### 📈 Escalabilidad
+- Ampliar el análisis geométrico para detectar:
+  - Clips
+  - Tornillos
+  - Puntos de soldadura
+  - Otros elementos de fijación
+
+### 🗂️ Procesamiento por Lotes
+- Análisis automático de carpetas completas
+- Soporte para cientos de archivos STEP por ejecución
+- Mayor eficiencia en inspecciones masivas
 
 ## El Equipo
 **Desarrolladores e Investigadores:**
