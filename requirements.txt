@@ -1,0 +1,7 @@
+# Recomendado usar: python==3.10.x en el entorno
+
+pythonocc-core
+numpy
+scikit-learn
+pandas
+openpyxl
